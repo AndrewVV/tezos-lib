@@ -1,0 +1,27 @@
+{
+  "name": "tezos-lib",
+  "version": "1.0.0",
+  "description": "Methods for working with the Tezos blockchain. Suitable for web wallets and exchanges.",
+  "main": "TezosLib.js",
+  "scripts": {
+    "start": "nodemon TezosLib.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndrewVV/tezos-lib.git"
+  },
+  "author": "",
+  "license": "MIT License",
+  "bugs": {
+    "url": "https://github.com/AndrewVV/tezos-lib/issues"
+  },
+  "homepage": "https://github.com/AndrewVV/tezos-lib#readme",
+  "dependencies": {
+    "conseiljs": "^0.4.1",
+    "dotenv": "^8.2.0",
+    "multicoin-address-validator": "^0.4.1",
+    "node-fetch": "^2.6.0",
+    "util": "^0.12.2"
+  }
+}
