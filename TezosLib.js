@@ -11,14 +11,11 @@ const network = 'carthagenet';
 const TZ_DECIMALS = 6;
 
 // url and apiKey you could get here https://nautilus.cloud/
-const conseilServer = { url: TEZOS_TEST_NODE, apiKey: API_DEV_KEY, network };
+const conseilServer = { url: "https://conseil-dev.cryptonomic-infra.tech:443", apiKey: API_DEV_KEY, network };
 
 class TezosLib {
     constructor(){
         // for test
-        // this.sendTransaction("tz1QSHaKpTFhgHLbqinyYRjxD5sLcbfbzhxy", 0.1, 0.0015).then(res =>{
-        //     console.log(res)
-        // })
         this.generateAddress()
     }
 
@@ -39,6 +36,7 @@ class TezosLib {
     async getBalance(address){
         try {
             const data = await conseiljs.TezosConseilClient.getAccount(conseilServer, network, address);
+            console.log(data)
             let balance = data.balance;
             balance = balance/(Math.pow(10, TZ_DECIMALS));
             return balance;
@@ -58,7 +56,6 @@ class TezosLib {
                 seed: '',
                 storeType: conseiljs.StoreType.Fundraiser
             };
-            console.log("keystore", keystore)
             const result = await conseiljs.TezosNodeWriter.sendTransactionOperation(TEZOS_TEST_NODE, keystore, to, amount, fee, '',);
             const txHash = result.operationGroupID;
             console.log('txHash', txHash, typeof txHash)
@@ -67,7 +64,41 @@ class TezosLib {
             console.error(error);
             return "SEND_TX_FAILED";
     	}
-	}
+    }
+    
+    async activateAccount() {
+        try {
+            const keystore = {
+                publicKey: myTestPublicKey,
+                privateKey: myTestPrivateKey,
+                publicKeyHash: myTestAddress,
+                seed: '',
+                storeType: conseiljs.StoreType.Fundraiser
+            };
+            const result = await conseiljs.TezosNodeWriter.sendIdentityActivationOperation(TEZOS_TEST_NODE, keystore, secret);
+            console.log(result)
+            console.log(`Injected operation group id ${result.operationGroupID}`)
+            return result.operationGroupID;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async revealAccount() {
+        try {
+            const keystore = {
+                publicKey: myTestPublicKey,
+                privateKey: myTestPrivateKey,
+                publicKeyHash: myTestAddress,
+                seed: '',
+                storeType: conseiljs.StoreType.Fundraiser
+            };
+            const result = await conseiljs.TezosNodeWriter.sendKeyRevealOperation(TEZOS_TEST_NODE, keystore);
+            console.log(`Injected operation group id ${result.operationGroupID}`);           
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     async getTxHistory(address){
         try {
